@@ -293,6 +293,8 @@ fork(void)
 
   pid = np->pid;
 
+  np->trace_mask = p->trace_mask;  // Copy to sub process.
+
   np->state = RUNNABLE;
 
   release(&np->lock);
@@ -693,3 +695,18 @@ procdump(void)
     printf("\n");
   }
 }
+
+int
+getprocnum(void)
+{
+  int procnum = 0;
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC]; p++) {
+    acquire(&p->lock);
+    if(p->state != UNUSED)
+      procnum++;
+    release(&p->lock);
+  }
+  return procnum;
+}
+
