@@ -80,11 +80,15 @@ usertrap(void)
   if(which_dev == 2)
   {
     p->tick_num += 1;
-    if(p->tick_num == p->alarm_interval)
+    if(p->tick_num == p->alarm_interval && p->alarm_interval != 0 && p->is_alarming == 0)
     {
+       // Save p->trapframe into p->alarm_trapframe and exec p->alarm_handler
+       memmove(p->alarm_trapframe, p->trapframe, sizeof(struct trapframe));
+      
       // p->alarm_handler();  // WHY CANNOT CALL THIS DIRECTLY
       p->trapframe->epc = (uint64)p->alarm_handler;
       p->tick_num = 0;
+      p->is_alarming = 1;
     }
     yield();
   }

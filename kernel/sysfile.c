@@ -506,5 +506,8 @@ sys_sigalarm(void)
 int
 sys_sigreturn(void)
 {
+  // Recover original trapframe from p->alarm_trapframe
+  memmove(myproc()->trapframe, myproc()->alarm_trapframe, sizeof(struct trapframe));
+  myproc()->is_alarming = 0;
   return 0;
 }

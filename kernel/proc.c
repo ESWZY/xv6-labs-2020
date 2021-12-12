@@ -128,8 +128,15 @@ found:
   p->context.sp = p->kstack + PGSIZE;
 
   // Lab: traps: Alarm
-  // Init tick_num
   p->tick_num = 0;
+  p->is_alarming = 0;
+  p->alarm_interval = 0;
+  p->alarm_handler = 0;
+  if((p->alarm_trapframe = (struct trapframe*)kalloc()) == 0) {
+    freeproc(p);
+    release(&p->lock);
+    return 0;
+  }
 
   return p;
 }
@@ -154,6 +161,15 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
+
+  // Lab: traps: Alarm
+  // Clean all status and free alarm_trapframe
+  p->tick_num = 0;
+  p->is_alarming = 0;
+  p->alarm_interval = 0;
+  p->alarm_handler = 0;
+  if(p->alarm_trapframe)
+    kfree((void*)p->alarm_trapframe);
 }
 
 // Create a user page table for a given process,

@@ -109,4 +109,6 @@ struct proc {
   int tick_num;                // how many ticks have passed since the last call to a process's alarm handler
   int alarm_interval;
   void (*alarm_handler)();
+  int is_alarming;
+  struct trapframe* alarm_trapframe;
 };
