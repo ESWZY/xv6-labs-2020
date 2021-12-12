@@ -104,4 +104,9 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
   pagetable_t kernelpgtbl;     // Kernel page table
+  
+  // Lab: traps: Alarm
+  int tick_num;                // how many ticks have passed since the last call to a process's alarm handler
+  int alarm_interval;
+  void (*alarm_handler)();
 };

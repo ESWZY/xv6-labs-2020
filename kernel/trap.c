@@ -78,7 +78,16 @@ usertrap(void)
 
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2)
+  {
+    p->tick_num += 1;
+    if(p->tick_num == p->alarm_interval)
+    {
+      // p->alarm_handler();  // WHY CANNOT CALL THIS DIRECTLY
+      p->trapframe->epc = (uint64)p->alarm_handler;
+      p->tick_num = 0;
+    }
     yield();
+  }
 
   usertrapret();
 }
