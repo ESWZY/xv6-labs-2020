@@ -46,8 +46,8 @@ sys_sbrk(void)
 
   if(argint(0, &n) < 0)
     return -1;
-  myproc()->sz += n;
   addr = myproc()->sz;
+  myproc()->sz += n;
   // if(growproc(n) < 0)
   //   return -1;
   return addr;
