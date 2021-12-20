@@ -1,0 +1,6 @@
+If there are multiple threads executing insert() simultaneously, 
+a condition that more than 1 threads have allocated entry structs 
+and have the same tail of the link list will happen. So, if they 
+execute the assignment, the last one will overlay all assignments 
+before. Thus, some value will be "orphan data" at memory, and will
+not be indexed.
