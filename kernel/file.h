@@ -38,3 +38,6 @@ struct devsw {
 extern struct devsw devsw[];
 
 #define CONSOLE 1
+
+// maximum recursion depth for soft link
+#define MAX_SYMLINK_DEPTH 10
